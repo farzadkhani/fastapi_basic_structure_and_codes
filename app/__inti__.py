@@ -1,4 +1,6 @@
 from fastapi import FastAPI
+from sqladmin import Admin
+from fastapi_admin.app import app as admin_app
 
 from . import config
 from .database import engine
@@ -18,3 +20,4 @@ app = FastAPI(
 from .routes import account_routes
 
 # for run admin.py routes import it to hear
+app.mount("/admin", admin_app)

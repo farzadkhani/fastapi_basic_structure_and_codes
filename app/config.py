@@ -1,6 +1,10 @@
+import os
+
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 ## FastAPI config
 DEBUG = True
-
 
 ## DB config
 SQLALCHEMY_DATABASE_URL = "sqlite:///./db.sqlite3"
