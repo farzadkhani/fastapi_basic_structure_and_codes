@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-from . import config
+from .. import config
 
 # Create a database URL for SQLAlchemy
 
@@ -22,10 +22,3 @@ SessionLocal = sessionmaker(
 
 # Create a Base class
 Base = declarative_base()
-Base.metadata.create_all(bind=engine)
-
-# import all models here
-from .models import account_models
-
-# Create a table object for each model
-Base.metadata.tables[account_models.User.__tablename__]

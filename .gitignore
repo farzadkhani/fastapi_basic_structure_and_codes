@@ -9,7 +9,6 @@ dist/
 .vscode
 # Compiled Java class files
 *.class
-data/
 # Compiled Python bytecode
 *.py[cod]
 
