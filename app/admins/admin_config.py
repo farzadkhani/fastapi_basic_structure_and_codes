@@ -6,8 +6,8 @@ import app
 from fastapi_admin.app import app as admin_app
 from fastapi_admin.providers.login import UsernamePasswordProvider
 
-from ..models.account_models import UserModel
-from ..config import BASE_DIR
+from app.models.account_models import UserModel
+from app.config import BASE_DIR
 
 login_provider = UsernamePasswordProvider(
     admin_model=UserModel,

@@ -1,6 +1,7 @@
 from fastapi import FastAPI
+import uvicorn
 
-from . import config
+from app import config
 
 app = FastAPI(
     debug=config.DEBUG,
@@ -21,3 +22,7 @@ app.include_router(
 )
 
 # for run admin.py routes import it to hear
+
+
+# if __name__ == "__main__":
+#     uvicorn.run(app, host="127.0.0.1", port=8000)

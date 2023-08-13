@@ -1,6 +1,6 @@
 from sqladmin import ModelView
-from ..schemas.account_schemas import UserSchema
-from ..models.account_models import UserModel
+from app.schemas.account_schemas import UserSchema
+from app.models.account_models import UserModel
 
 from fastapi_admin.app import app as admin_app
 from fastapi_admin.resources import Links

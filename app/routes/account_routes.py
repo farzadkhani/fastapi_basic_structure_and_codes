@@ -4,9 +4,9 @@ from fastapi import APIRouter, Depends, HTTPException, status, Path
 
 from sqlalchemy.orm import Session
 
-from data.database import SessionLocal
-from schemas.account_schemas import UserSchema
-from utils.account_selectors import (
+from app.data.database import SessionLocal
+from app.schemas.account_schemas import UserSchema
+from app.utils.account_selectors import (
     retrieve_all_users,
     retrieve_user_by_id,
     retrieve_user_by_username,

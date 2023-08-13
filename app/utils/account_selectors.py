@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from models.account_models import UserModel
+from app.models.account_models import UserModel
 
 
 def retrieve_all_users(db: Session):
