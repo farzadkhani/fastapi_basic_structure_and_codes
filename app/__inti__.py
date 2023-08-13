@@ -15,6 +15,6 @@ app = FastAPI(
 
 
 # import all routes to eccute them
-
+from .routes import account_routes
 
 # for run admin.py routes import it to hear

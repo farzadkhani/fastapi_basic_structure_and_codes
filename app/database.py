@@ -22,3 +22,10 @@ SessionLocal = sessionmaker(
 
 # Create a Base class
 Base = declarative_base()
+Base.metadata.create_all(bind=engine)
+
+# import all models here
+from .models import account_models
+
+# Create a table object for each model
+Base.metadata.tables[account_models.User.__tablename__]

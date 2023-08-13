@@ -1,1 +1,18 @@
-# docker file for building image for springboot applicationss
+# Define the base image to build from
+FROM python:3.11-slim-buster
+
+# Set the working directory for the app
+WORKDIR /app
+
+# Copy the requirements file to the working directory and install the requirements
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+# Copy the app to the working directory
+COPY . .
+
+# Expose the port the app will run on
+EXPOSE 8000
+
+# Run the app
+CMD ["uvicorn", "app.main:app", "--host", "8000", "--reload"]
