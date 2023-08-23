@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 
 from app.data.database import SessionLocal
 from app.schemas.account_schemas import UserSchema
-from app.utils.account_cruds import (
+from app.cruds.user_cruds import (
     UserRepository,
     retrieve_all_users,
     retrieve_user_by_id,

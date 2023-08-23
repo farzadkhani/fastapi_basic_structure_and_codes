@@ -9,10 +9,14 @@ class UserBaseSchema(BaseModel):
 
     username: str
     email: str
-    first_name: Optional[str] = None
-    last_name: Optional[str] = None
-    created_at: Optional[str] = None
-    updated_at: Optional[str] = None
+
+
+class UserVerifySchema(UserBaseSchema):
+    """
+    User Verify Schema
+    """
+
+    id: int
 
 
 class UserCreateSchema(UserBaseSchema):
@@ -21,6 +25,61 @@ class UserCreateSchema(UserBaseSchema):
     """
 
     password: str
+    first_name: str
+    last_name: str
+    is_active: bool = True
+    is_superuser: bool = False
+    # created_at: Optional[str] = None
+    # updated_at: Optional[str] = None
+
+
+class UserUpdateSchema(UserBaseSchema):
+    """
+    User Update Schema
+    """
+
+    first_name: str
+    last_name: str
+    is_active: bool = True
+    is_superuser: bool = False
+    # updated_at: Optional[str] = None
+
+
+class UserChangePasswordSchema(BaseModel):
+    """
+    User Change Password Schema
+    """
+
+    password: str
+    new_password: str
+
+
+class UserResetPasswordSchema(BaseModel):
+    """
+    User Reset Password Schema
+    """
+
+    token: str
+    password: str
+
+
+class UserAuthenticateSchema(BaseModel):
+    """
+    User Authenticate Schema
+    """
+
+    password: str
+
+
+class UserLogInSchema(BaseModel):
+    """
+    User LogIn Schema
+    """
+
+    account_id: str
+    password: str
+    ip_address: str
+    browser: str
 
 
 class UserSchema(UserCreateSchema):
@@ -28,12 +87,27 @@ class UserSchema(UserCreateSchema):
     User Schema
     """
 
-    # from_attributes: ClassVar[bool] = True
-
     id: int
-    is_active: bool
-    is_superuser: bool
 
     class Config:
         orm_mode = True
-        from_attributes = True
+        # from_attributes = True
+
+
+class TokenSchema(BaseModel):
+    """
+    loging schemas: token
+    """
+
+    access_token: str
+    token_type: str
+
+
+class TokenDataSchema(BaseModel):
+    """
+    loging schemas: token date
+    """
+
+    email: str = None
+    expire: str = None
+    issue_time: str = None
