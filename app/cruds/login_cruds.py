@@ -12,7 +12,7 @@ from logs.orm_logger import fastapi_logger
 from app.cruds.base_user_cruds import get_user
 
 
-class CRUDLogin:
+class LoginCRUD:
     def check_username_password(
         self, email: str, password: str, db: Session
     ) -> Any:
@@ -101,4 +101,4 @@ class CRUDLogin:
             return None
 
 
-crud_login = CRUDLogin()
+login_crud = LoginCRUD()
