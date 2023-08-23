@@ -5,7 +5,7 @@ FROM python:3.11-slim-buster
 WORKDIR /app
 
 # Copy the requirements file to the working directory and install the requirements
-COPY requirements.txt .
+COPY app/requirements.txt .
 RUN pip install -r requirements.txt
 
 # Copy the app to the working directory
@@ -15,4 +15,4 @@ COPY ./app .
 EXPOSE 8000
 
 # Run the app
-CMD ["uvicorn", "app.main:app", "--host", "8000", "--reload"]
+# CMD ["uvicorn", "app.main:app", "--host", "8000", "--reload"]

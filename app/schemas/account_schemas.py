@@ -11,6 +11,8 @@ class UserBaseSchema(BaseModel):
     email: str
     first_name: Optional[str] = None
     last_name: Optional[str] = None
+    created_at: Optional[str] = None
+    updated_at: Optional[str] = None
 
 
 class UserCreateSchema(UserBaseSchema):
@@ -30,6 +32,7 @@ class UserSchema(UserCreateSchema):
 
     id: int
     is_active: bool
+    is_superuser: bool
 
     class Config:
         orm_mode = True

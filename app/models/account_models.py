@@ -1,5 +1,15 @@
+from datetime import datetime
+
 from app.data.database import Base
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Text
+from sqlalchemy import (
+    Boolean,
+    Column,
+    ForeignKey,
+    Integer,
+    String,
+    Text,
+    TIMESTAMP,
+)
 
 
 # Create a User model
@@ -13,3 +23,6 @@ class UserModel(Base):
     first_name = Column(String)
     last_name = Column(String)
     is_active = Column(Boolean, default=True)
+    is_superuser = Column(Boolean, default=False)
+    created_at = Column(TIMESTAMP, nullable=False, default=datetime.utcnow)
+    updated_at = Column(TIMESTAMP, nullable=False, default=datetime.utcnow)
