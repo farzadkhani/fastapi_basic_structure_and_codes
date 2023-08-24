@@ -5,15 +5,15 @@ from typing import Any
 import sys
 
 sys.path.append("..")
-from models import account_models, log_models
-from utils import password as utils_password
-from schemas import account_schemas
-from logs.orm_logger import fastapi_logger
+from app.models import account_models, log_models
+from app.utils import password as utils_password
+from app.schemas import account_schemas
+from app.logs.orm_logger import fastapi_logger
 from app.cruds.base_user_cruds import get_user
 
 
 class LoginCRUD:
-    def check_username_password(
+    def check_email_password(
         self, email: str, password: str, db: Session
     ) -> Any:
         """Verify Password"""

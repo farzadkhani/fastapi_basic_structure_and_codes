@@ -9,8 +9,8 @@ from sqlalchemy.exc import SQLAlchemyError
 from fastapi.logger import logger as fastapi_logger
 from pydantic import BaseModel
 
-from models import log_models
-from data import database
+from app.models import log_models
+from app.data import database
 
 
 class SQLALCHAMYHandler(logging.Handler):

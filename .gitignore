@@ -263,3 +263,6 @@ web/celerybeat-schedule.bak
 web/celerybeat-schedule.dat
 web/celerybeat-schedule.dir
 web/celerybeat-schedule.db
+
+# private and public keys
+*.pem

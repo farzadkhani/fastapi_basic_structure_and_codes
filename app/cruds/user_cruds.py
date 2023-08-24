@@ -8,19 +8,18 @@ from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import defer
 
-from models import account_models, pagination
-from utils import password as utils_password
-from schemas import account_schemas
-from logs.orm_logger import fastapi_logger
+from app.models import pagination
+from app.utils import password as utils_password
+from app.logs.orm_logger import fastapi_logger
 
 from app.models.account_models import UserModel
-from app.schemas.account_schemas import UserSchema
+from app.schemas.account_schemas import RegularUserSchema
 
 from app.utils.password import get_password_hash
 
 
 class UserCRUD:
-    def create_user(self, db: Session, user: UserSchema) -> Any:
+    def create_regular_user(self, db: Session, user: RegularUserSchema) -> Any:
         """
         create user
         """
@@ -32,8 +31,9 @@ class UserCRUD:
                 password=hashed_password,
                 first_name=user.first_name,
                 last_name=user.last_name,
-                is_active=user.is_active,
-                is_superuser=user.is_superuser,
+                is_active=user.__dict__.get("is_active"),
+                is_staff=user.__dict__.get("is_staff"),
+                is_superuser=user.__dict__.get("is_superuser"),
                 created_at=datetime.utcnow(),
                 updated_at=datetime.utcnow(),
             )
@@ -45,7 +45,7 @@ class UserCRUD:
             fastapi_logger.exception("create_user")
             return None
 
-    def update_user(self, db: Session, user: UserSchema) -> Any:
+    def update_regular_user(self, db: Session, user: RegularUserSchema) -> Any:
         """
         update user
         """
@@ -179,7 +179,7 @@ class UserCRUD:
             db_user = (
                 db.query(UserModel)
                 .filter(UserModel.id == id)
-                .options(defer("password"))
+                .options(defer(UserModel.password))
                 .first()
             )
             return db_user
@@ -196,7 +196,7 @@ class UserCRUD:
         try:
             users = (
                 db.query(UserModel)
-                .options(defer("password"))
+                .options(defer(UserModel.password))
                 .order_by(UserModel.id.desc())
             )
             return pagination.paginate(
@@ -205,5 +205,6 @@ class UserCRUD:
         except SQLAlchemyError as e:
             fastapi_logger.exception("get_all_users")
             return None
-        
+
+
 user_crud = UserCRUD()

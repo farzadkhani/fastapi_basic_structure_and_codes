@@ -7,20 +7,20 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 def get_config() -> Dict:
-    """Get Config Json"""
+    """
+    Get Config Json
+    """
     with open(
-        str(Path(__file__).parent.parent)
-        + os.sep
-        + "config"
-        + os.sep
-        + "config.json",
-        "r",
+        str(Path(__file__).parent.parent) + "/" + "app" + "/" + "config.json",
+        "rb",
     ) as fp:
         return json.load(fp)
 
 
 class ProjectSettings:
-    """Project Configuration"""
+    """
+    Project Configuration
+    """
 
     __DATA = get_config()["PROJECT_CONF"]
     DEBUG = __DATA["DEBUG"]
@@ -39,7 +39,9 @@ class ProjectSettings:
 
 
 class EmailSettings:
-    """Email Settings"""
+    """
+    Email Settings
+    """
 
     __DATA = get_config()["EMAIL_CONF"]
     EMAIL_RESET_TOKEN_EXPIRE_HOURS = __DATA["EMAIL_RESET_TOKEN_EXPIRE_HOURS"]
@@ -50,7 +52,9 @@ class EmailSettings:
 
 
 class DBSettings:
-    """Database Configuration"""
+    """
+    Database Configuration
+    """
 
     __DATA = get_config()["DATABASE_CONF"]
 
@@ -85,3 +89,13 @@ class DBSettings:
 
 ## DB config
 # SQLALCHEMY_DATABASE_URL = "postgresql://user:password@postgresserver/db"
+
+
+class AuthenticationSettings:
+    """
+    Authentication Configuration
+    """
+
+    __Data = get_config()["AUTHENTICATION_CONF"]
+    SECRET_KEY = __Data["SECRET_KEY"]
+    ALGORITHM = __Data["ALGORITHM"]

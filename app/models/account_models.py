@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import sys
+
 sys.path.append("..")
 
 from app.data.database import Base
@@ -28,6 +29,7 @@ class UserModel(Base):
     first_name = Column(String, nullable=True)
     last_name = Column(String, nullable=True)
     is_active = Column(Boolean, nullable=False, default=True)
+    is_staff = Column(Boolean, nullable=False, default=False)
     is_superuser = Column(Boolean, nullable=False, default=False)
     created_at = Column(TIMESTAMP, nullable=False, default=datetime.utcnow)
     updated_at = Column(TIMESTAMP, nullable=False, default=datetime.utcnow)
@@ -36,7 +38,6 @@ class UserModel(Base):
     __table_args__ = (
         PrimaryKeyConstraint("id", name="users_pkey"),
         UniqueConstraint("email"),
-        {"schema": "articles", "extend_existing": True},
     )
 
     def __repr__(self):

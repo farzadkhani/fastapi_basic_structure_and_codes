@@ -13,7 +13,7 @@
         "BACKEND_CORS_ORIGINS": [
             "*"
         ],
-        "ACCESS_TOKEN_EXPIRE_MINUTES": 300,
+        "ACCESS_TOKEN_EXPIRE_MINUTES": 5,
         "SESSION_TOKEN_EXPIRE_SECONDS": 43200
     },
     "EMAIL_CONF": {
@@ -33,5 +33,9 @@
         "CHECK_SAME_THREAD": false,
         "AUTOCOMMIT": false,
         "AUTOFLUSH": false
+    },
+    "AUTHENTICATION_CONF": {
+        "SECRET_KEY": "django-insecure-)pud4(c&l@t&to9uq)yk9kd&3x(f)nw@#(kln#g6^n5b3*wye@",
+        "ALGORITHM": "HS256"
     }
 }

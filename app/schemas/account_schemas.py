@@ -19,29 +19,87 @@ class UserVerifySchema(UserBaseSchema):
     id: int
 
 
-class UserCreateSchema(UserBaseSchema):
+class RegularUserCreateSchema(UserBaseSchema):
     """
-    User Create Schema
+    Regular User Create Schema
     """
 
     password: str
     first_name: str
     last_name: str
-    is_active: bool = True
-    is_superuser: bool = False
+    # is_active: bool = True
+    # is_staff: bool = False
+    # is_superuser: bool = False
     # created_at: Optional[str] = None
     # updated_at: Optional[str] = None
 
 
-class UserUpdateSchema(UserBaseSchema):
+class StaffUserCreateSchema(UserBaseSchema):
     """
-    User Update Schema
+    Staff User Create Schema
+    """
+
+    password: str
+    first_name: str
+    last_name: str
+    is_staff: bool = True
+    # is_active: bool = True
+    # is_superuser: bool = False
+    # created_at: Optional[str] = None
+    # updated_at: Optional[str] = None
+
+
+class SuperUserCreateSchema(UserBaseSchema):
+    """
+    Super User Create Schema
+    """
+
+    password: str
+    first_name: str
+    last_name: str
+    is_staff: bool = True
+    is_superuser: bool = True
+    # is_active: bool = True
+    # created_at: Optional[str] = None
+    # updated_at: Optional[str] = None
+
+
+class RegularUserUpdateSchema(UserBaseSchema):
+    """
+    Regular User Update Schema
     """
 
     first_name: str
     last_name: str
-    is_active: bool = True
-    is_superuser: bool = False
+    # is_staff: bool = False
+    # is_superuser: bool = False
+    # is_active: bool = True
+    # updated_at: Optional[str] = None
+
+
+class StaffUserUpdateSchema(UserBaseSchema):
+    """
+    Staff User Update Schema
+    """
+
+    first_name: str
+    last_name: str
+    is_staff: bool = True
+    # is_superuser: bool = False
+    # is_active: bool = True
+    # updated_at: Optional[str] = None
+
+
+class SuperUserUpdateSchema(UserBaseSchema):
+    """
+    Super User Update Schema
+    """
+
+    first_name: str
+    last_name: str
+    is_staff: bool = True
+    is_superuser: bool = True
+    # is_active: bool = True
     # updated_at: Optional[str] = None
 
 
@@ -76,13 +134,13 @@ class UserLogInSchema(BaseModel):
     User LogIn Schema
     """
 
-    account_id: str
+    email: str
     password: str
     ip_address: str
     browser: str
 
 
-class UserSchema(UserCreateSchema):
+class RegularUserSchema(RegularUserCreateSchema):
     """
     User Schema
     """
@@ -92,6 +150,15 @@ class UserSchema(UserCreateSchema):
     class Config:
         orm_mode = True
         # from_attributes = True
+
+
+class GetTokenSchema(BaseModel):
+    """
+    loging schemas: get token
+    """
+
+    email: str
+    password: str
 
 
 class TokenSchema(BaseModel):

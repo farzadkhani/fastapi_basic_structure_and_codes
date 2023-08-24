@@ -1,18 +1,39 @@
+import uvicorn
+import sys
+
+sys.path.append("..")
+
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
-import uvicorn
+from fastapi.middleware.cors import CORSMiddleware
+
 from app.data.database import Base, engine
 
-from app import config
+# from app import config
+
+from app.config import ProjectSettings
+
+project_settings = ProjectSettings()
+
 
 app = FastAPI(
-    debug=config.DEBUG,
-    title="Basic structure for fastapi project",
-    description="A simple project structure for fastapi project",
-    version="0.1.0",
-    docs_url="/swagger/docs/",
-    redoc_url="/swagger/redoc/",
-    openapi_url="/swagger/openapi.json",
+    debug=project_settings.DEBUG,
+    title=project_settings.PROJECT_NAME,
+    description=project_settings.PROJECT_DESCRIPTION,
+    version=project_settings.API_VERSION,
+    docs_url=project_settings.DOCS_URL,
+    redoc_url=project_settings.REDOC_URL,
+    openapi_url=project_settings.OPENAPI_URL,
+)
+
+
+# Middleware Settings
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=ProjectSettings.BACKEND_CORS_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
@@ -21,8 +42,9 @@ app = FastAPI(
 def startup_event():
     Base.metadata.create_all(bind=engine)
 
+
 # import all routes to eccute them
-from .routes import account_routes
+from app.routes import user_routes, login_routes
 
 
 # Root API
@@ -34,11 +56,12 @@ from .routes import account_routes
 
 
 # include all routes
-app.include_router(
-    account_routes.api_router, prefix="/api/v1/accounts", tags=["account"]
-)
+app.include_router(user_routes.router, prefix="/api/v1/users", tags=["users"])
+app.include_router(login_routes.router, prefix="/api/v1/login", tags=["login"])
+
+
 # for run admin.py routes import it to hear
 
 
-# if __name__ == "__main__":
-#     uvicorn.run(app, host="127.0.0.1", port=8000, log_level='debug')
+if __name__ == "__main__":
+    uvicorn.run(app, host="127.0.0.1", port=8000, log_level="debug")

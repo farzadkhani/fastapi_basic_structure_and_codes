@@ -1,98 +1,62 @@
-from typing import List
+import sys
 
-from fastapi import APIRouter, Depends, HTTPException, status, Path
-from fastapi.responses import JSONResponse
+sys.path.append("..")
+
+from enum import Enum
 
 from sqlalchemy.orm import Session
+from fastapi import APIRouter, Depends
+from fastapi.encoders import jsonable_encoder
+from fastapi.responses import JSONResponse
+from app.utils import deps
+from app.schemas import account_response_schemas, account_schemas, redis_schemas
+from app.cruds.user_cruds import user_crud
+from app.cruds.login_cruds import login_crud
+from app.cruds.base_user_cruds import get_user  # , get_active_user
 
-from app.data.database import SessionLocal
-from app.schemas.account_schemas import UserSchema
-from app.cruds.user_cruds import (
-    UserRepository,
-    retrieve_all_users,
-    retrieve_user_by_id,
-    retrieve_user_by_username,
-    post_user,
+from starlette import status
+
+router = APIRouter()
+
+
+class UserStatusEnum(str, Enum):
+    enable = "enable"
+    disable = "disable"
+
+
+@router.post(
+    "/register-regular-user/",
+    responses=account_response_schemas.single_users_responses,
 )
-
-api_router = APIRouter()
-
-
-def get_db():
+def register_regular_user(
+    user: account_schemas.RegularUserCreateSchema,
+    db: Session = Depends(deps.get_db),
+    # current_user: account_schemas.UserVerifySchema = Depends(
+    #     deps.get_current_user
+    # ),
+) -> JSONResponse:
     """
-    Get database session
+    Register User
     """
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
-@api_router.get(
-    "/users/", response_model=List[UserSchema], summary="Get all users"
-)
-def get_all_users(db: Session = Depends(get_db)):
-    """
-    Get all users
-    """
-    users = retrieve_all_users(db)
-    if not users:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="No users found",
+    db_user = get_user(email=user.email, db=db)
+    if db_user is not None:
+        return JSONResponse(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            content={"message": "Email already registered"},
         )
-    return users
-
-
-@api_router.get(
-    "/users/{user_id}", response_model=UserSchema, summary="Get user by id"
-)
-def get_user_by_id(
-    user_id: int = Path(..., gt=0),
-    db: Session = Depends(get_db),
-):
-    """
-    Get user by id
-    """
-    user = retrieve_user_by_id(db, user_id)
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="User not found",
+        # raise HTTPException(
+        #     status_code=status.HTTP_400_BAD_REQUEST,
+        #     detail="Email already registered",
+        # )
+    db_user = user_crud.create_regular_user(db=db, user=user)
+    if db_user is None:
+        return JSONResponse(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            content={"message": "Internal Server Error"},
         )
-    return user
-
-
-@api_router.get(
-    "/users/{username}",
-    response_model=UserSchema,
-    summary="Get user by username",
-)
-def get_user_by_username(
-    username: str = Path(..., min_length=3),
-    db: Session = Depends(get_db),
-):
-    """
-    Get user by username
-    """
-    user = retrieve_user_by_username(db, username)
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="User not found",
-        )
-    return user
-
-
-@api_router.post(
-    "/users/", response_model=UserSchema, summary="Create a new user"
-)
-def create_user(user: UserSchema, db: Session = Depends(get_db)):
-    """
-    Create a new user
-    """
-    user = UserRepository.create_user(db, user)
+    jsonable_encoder_response = jsonable_encoder(db_user)
+    del jsonable_encoder_response["password"]
     return JSONResponse(
-        status_code=status.HTTP_201_CREATED, content={"message": "User created"}
+        status_code=status.HTTP_200_OK,
+        content=jsonable_encoder_response,
     )
